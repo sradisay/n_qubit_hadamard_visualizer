@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>n qubit hadamard visualizer</title>
+    <meta name="description" content="a simple n qubit hadamard visualizer">
+</head>
+<style>
+    *{
+        font-family: monospace;
+
+    }
+    p{
+        margin: 0;
+        font-size: large;
+        white-space: pre;
+    }
+</style>
+<body>
+    <h2>n Qubit Hadamard Gate Visualizer</h2>
+    <br>
+    <div>
+        <input type="number" id="n" title="n" placeholder="n qubits">
+        <input type="number" id="x" title="x" placeholder="x (integer)">
+        <span>result</span>
+        <span id="result"></span>
+    </div>
+    <br>
+    <div id="graph">
+        <p>┃ </p>
+        <p>┃ </p>
+        <p>┃ </p>
+        <p>┃ </p>
+        <p>┣━</p>
+        <p>┃ </p>
+        <p>┃ </p>
+        <p>┃ </p>
+        <p>┃ </p>
+    </div>
+    <script>
+        let graph = document.getElementById("graph");
+        let x_input = document.getElementById("x");
+        let n_input = document.getElementById("n");
+        let result_span = document.getElementById("result");
+
+        function bitwise_inner_product(x, y) {
+            let n = x & y;
+
+            let count = 0;
+            while (n !== 0) {
+                n &= (n - 1);
+                count++;
+            }
+            return count % 2;
+        }
+        function n_qubit_hadamard(n, x) {
+            let res = []
+            for (let i = 0; i < 2**n; i++) {
+                res.push(bitwise_inner_product(x, i));
+            }
+            return res;
+        }
+        function reset_graph() {
+            let index = 0;
+            for (const row of graph.children) {
+                row.innerText = "┃";
+                index++;
+                if (index === 5)
+                    row.innerText = "┣";
+            }
+        }
+        function append_column(str) {
+            let index = 0;
+            for (const row of graph.children) {
+                row.innerText = row.innerText + str[index];
+                index++;
+            }
+        }
+        function change_handler(e) {
+            let x = x_input.value;
+            let n = n_input.value;
+
+            let result = n_qubit_hadamard(n, x);
+            result_span.innerText = result;
+            reset_graph();
+            for (const i of result) {
+                if (i)
+                    append_column("┃┃┃┃┻    ");
+                else
+                    append_column("    ┳┃┃┃┃");
+                append_column("    ━    ");
+            }
+        }
+
+        x_input.addEventListener("change", change_handler);
+        n_input.addEventListener("change", change_handler);
+    </script>
+</body>
+</html>
