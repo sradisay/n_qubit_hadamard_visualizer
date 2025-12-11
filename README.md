@@ -5,7 +5,8 @@ Visualizes the resulting waveform from integer parameters n and x.
 
 ## Demo
 
-1.  Try it out at https://quantum.sradisay.dev
+1.  Try it out at <a href="https://quantum.sradisay.dev" target="_blank" rel="noopener noreferrer">https://quantum.sradisay.dev</a>
+
 2.  Enter the number of qubits ($n$) and the integer state ($x$).
 3.  View the generated square wave graph representing the phase distribution.
    
