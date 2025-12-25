@@ -22,26 +22,27 @@
     <div>
         <input type="number" id="n" title="n" placeholder="n qubits">
         <input type="number" id="x" title="x" placeholder="x (integer)">
-        <span>result</span>
-        <span id="result"></span>
     </div>
+    <span><span id="result"></span></span>
     <br>
     <div id="graph">
-        <p>┃ </p>
-        <p>┃ </p>
-        <p>┃ </p>
-        <p>┃ </p>
-        <p>┣━</p>
-        <p>┃ </p>
-        <p>┃ </p>
-        <p>┃ </p>
-        <p>┃ </p>
+        <p>┏</p>
+        <p>┃</p>
+        <p>┃</p>
+        <p>┃</p>
+        <p>┣</p>
+        <p>┃</p>
+        <p>┃</p>
+        <p>┃</p>
+        <p>┃</p>
     </div>
     <script>
         let graph = document.getElementById("graph");
         let x_input = document.getElementById("x");
         let n_input = document.getElementById("n");
         let result_span = document.getElementById("result");
+        const pos = "━   ━    ";
+        const neg = "    ━   ━";
 
         function bitwise_inner_product(x, y) {
             let n = x & y;
@@ -61,12 +62,8 @@
             return res;
         }
         function reset_graph() {
-            let index = 0;
             for (const row of graph.children) {
-                row.innerText = "┃";
-                index++;
-                if (index === 5)
-                    row.innerText = "┣";
+                row.innerText = "";
             }
         }
         function append_column(str) {
@@ -83,12 +80,26 @@
             let result = n_qubit_hadamard(n, x);
             result_span.innerText = result;
             reset_graph();
+            let prev = pos;
+            let curr = "";
             for (const i of result) {
-                if (i)
-                    append_column("    ┳┃┃┃┃");
-                else
-                    append_column("┃┃┃┃┻    ");
-                append_column("    ━    ");
+                if (i){
+                    curr = neg;
+                }
+                else{
+                    curr = pos;
+                }
+                if (prev === curr) {
+                    append_column(curr);
+                }
+                else if (curr === pos) {
+                    append_column("┏┃┃┃╋┃┃┃┛");
+                }
+                else if (curr === neg) {
+                    append_column("┓┃┃┃╋┃┃┃┗");
+                }
+                append_column(curr);
+                prev = curr;
             }
         }
 
